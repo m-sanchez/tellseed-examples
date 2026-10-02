@@ -23,3 +23,4 @@ jobs:
       - run: python -m pip install datasets==5.0.1
       - run: python support-triage/load_dataset.py support-triage
       - run: python support-routing/load_dataset.py support-routing
+      - run: python scripts/verify-hub.py
