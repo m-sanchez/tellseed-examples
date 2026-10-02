@@ -1,0 +1,101 @@
+{
+  "schema": 1,
+  "version": "2.0.0",
+  "created": "2026-10-02",
+  "license": "CC0-1.0",
+  "language": "en",
+  "origin": "Original AI-authored fictional examples and labels. No customer data and no independent human annotation.",
+  "process": "Authored directly as a companion dataset; not collected or reviewed through a live Tellseed campaign.",
+  "sourceSha256": "edb278f5daed5bcb36966ebdf80073e0e0d987d01a8d5fc50777a5bc369fa69f",
+  "splitPolicy": "Fixed, disjoint intent families. Twelve train families, four validation families, four test families. Balanced classes in each split.",
+  "distributions": {
+    "train": {
+      "rows": 96,
+      "labels": {
+        "billing": 24,
+        "technical": 24,
+        "feature": 24,
+        "other": 24
+      },
+      "intentGroups": [
+        "bulk-controls",
+        "duplicate-charge",
+        "export-failure",
+        "how-to",
+        "localization",
+        "login-failure",
+        "new-integration",
+        "notification-failure",
+        "partnership",
+        "privacy-request",
+        "refund-request",
+        "subscription-cancellation"
+      ]
+    },
+    "validation": {
+      "rows": 32,
+      "labels": {
+        "billing": 8,
+        "technical": 8,
+        "feature": 8,
+        "other": 8
+      },
+      "intentGroups": [
+        "access-controls",
+        "employment-enquiry",
+        "invoice-details",
+        "sync-failure"
+      ]
+    },
+    "test": {
+      "rows": 32,
+      "labels": {
+        "billing": 8,
+        "technical": 8,
+        "feature": 8,
+        "other": 8
+      },
+      "intentGroups": [
+        "payment-arrangement",
+        "positive-feedback",
+        "reporting-capability",
+        "upload-failure"
+      ]
+    }
+  },
+  "challengeRows": 12,
+  "checks": {
+    "uniqueIds": true,
+    "uniqueNormalizedTexts": true,
+    "disjointIntentGroups": true,
+    "tokenJaccardThreshold": 0.85,
+    "maximumCrossSplitTokenJaccard": 0.32,
+    "closestCrossSplitPair": [
+      "tsr2-bulk-controls-05",
+      "tsr2-access-controls-03"
+    ],
+    "limitation": "Lexical checks do not establish semantic independence, absence of stereotypes, or label correctness."
+  },
+  "files": {
+    "routing-v2-train.jsonl": {
+      "sha256": "7ac34c9fe6cc7ceeb3469c4bebe0a58303c908614d772952a8db5d984acf4506",
+      "bytes": 21840
+    },
+    "routing-v2-validation.jsonl": {
+      "sha256": "c6b841675fa9d46f4e31682925db0b0a4e40f86e8db82a3e80ba4e05514fdb5d",
+      "bytes": 7371
+    },
+    "routing-v2-test.jsonl": {
+      "sha256": "f255bf52b2f0002dce1fab84f50a28c298ea5c0d45bf6fe1af6568e8a41d9eee",
+      "bytes": 7298
+    },
+    "routing-v2-challenge.jsonl": {
+      "sha256": "d07798259be21a8b11e5e11379f23d801cead8c8862f659c5c5082963199bcb3",
+      "bytes": 3057
+    },
+    "routing-v2-labels.json": {
+      "sha256": "14fe7d5f1787042bd65492d8e47c46e7302fbc122141a41fb382eebc0d4babc0",
+      "bytes": 75
+    }
+  }
+}

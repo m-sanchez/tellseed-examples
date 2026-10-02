@@ -14,8 +14,12 @@ jobs:
         with:
           node-version: '24.x'
       - run: node scripts/verify.mjs
+      - run: node support-routing/build.mjs --check
+      - run: node support-routing/verify.mjs support-routing
+      - run: node n8n/build.mjs && git diff --exit-code -- n8n/reviewed-export.json
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       - run: python -m pip install datasets==5.0.1
       - run: python support-triage/load_dataset.py support-triage
+      - run: python support-routing/load_dataset.py support-routing

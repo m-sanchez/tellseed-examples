@@ -2,11 +2,29 @@
 
 Build a collection campaign, review its answers and export a dataset you can inspect.
 
-[Tellseed](https://tellseed.com/) · [Worked example](https://tellseed.com/guides/support-triage-dataset) · [MCP setup](https://tellseed.com/mcp) · [Start a free workspace](https://app.tellseed.com/start)
+[Tellseed](https://tellseed.com/) · [Worked example](https://tellseed.com/guides/support-triage-dataset) · [Hugging Face dataset](https://huggingface.co/datasets/m-sanchez/tellseed-support-triage-demo) · [MCP setup](https://tellseed.com/mcp) · [Start a free workspace](https://app.tellseed.com/start)
 
 This repository contains public, reproducible examples for [Tellseed](https://tellseed.com/), a hosted survey and data-collection tool you can use from an AI agent or its website. The product source remains private. You bring your own audience; Tellseed does not supply participants or train models.
 
-## Start with the support-triage example
+## Choose an example
+
+| Example | Contents | Use it for |
+| --- | --- | --- |
+| [Support routing v2](support-routing/README.md) | 160 original fictional requests, four balanced labels, 96/32/32 splits and 12 clarification cases | A classification starter experiment and import checks |
+| [Collection and review](support-triage/README.md) | Ten scripted answers become seven accepted rows through an isolated Tellseed instance | Reproducing the actual collection, correction and export process |
+| [n8n export workflow](n8n/README.md) | Native MCP Client, Bearer credential, frozen export and counts | Automating a reviewed export without an AI model |
+
+The larger dataset uses disjoint intent families across splits and includes a documented rubric, source text, deterministic builder, duplicate checks and file hashes. All labels are authored with AI assistance. There are no independently collected human judgements or model-performance claims.
+
+```python
+from datasets import load_dataset
+
+ds = load_dataset("m-sanchez/tellseed-support-triage-demo", "support-routing-v2")
+```
+
+Pin a full Hub commit with `revision=` for a repeatable experiment. Use `text` and `label` only as model fields. The [dataset card](support-routing/README.md) explains the held-out intent design and limitations. Run `node support-routing/verify.mjs support-routing` to check the local files, or `node support-routing/build.mjs --check` to reproduce them from source.
+
+## Follow the collection and review example
 
 Ten fictional support messages become seven accepted classification rows after scripted review. One label is corrected; its original answer remains in the raw export. One ambiguous answer, one invalid answer and one unreviewed answer are excluded.
 

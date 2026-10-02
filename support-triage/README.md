@@ -25,7 +25,7 @@ configs:
 
 Ten fictional support messages, ten scripted answers and nine scripted review decisions. Seven accepted examples remain after review, including one corrected label. There are **no real customer records, recruited participants or independently collected human judgements** in this dataset.
 
-Read the [complete walkthrough](https://tellseed.com/guides/support-triage-dataset). The same frozen files are available from Tellseed and the [public examples repository](https://github.com/m-sanchez/tellseed-examples). The default dataset configuration loads only the five train and two validation rows, not the raw exports or provenance files.
+Read the [complete walkthrough](https://tellseed.com/guides/support-triage-dataset). The same frozen example is published in the [GitHub examples repository](https://github.com/m-sanchez/tellseed-examples) and the `reviewed` configuration on [Hugging Face](https://huggingface.co/datasets/m-sanchez/tellseed-support-triage-demo). The separate `support-routing-v2` configuration adds 160 directly authored synthetic requests; it is not part of this seven-row collection fixture.
 
 ## Origin and process
 
