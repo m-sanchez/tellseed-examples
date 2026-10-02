@@ -1,0 +1,63 @@
+[
+  {
+    "key": "SUP-01",
+    "text": "I was charged twice for my monthly subscription. Please refund the duplicate charge.",
+    "answer": "billing",
+    "disposition": "ACCEPTED"
+  },
+  {
+    "key": "SUP-02",
+    "text": "The dashboard stays blank after I sign in, even after refreshing the page.",
+    "answer": "technical",
+    "disposition": "ACCEPTED"
+  },
+  {
+    "key": "SUP-03",
+    "text": "Could you add a dark mode to the dashboard?",
+    "answer": "feature",
+    "disposition": "ACCEPTED"
+  },
+  {
+    "key": "SUP-04",
+    "text": "What time does your support team open on Saturdays?",
+    "answer": "other",
+    "disposition": "ACCEPTED"
+  },
+  {
+    "key": "SUP-05",
+    "text": "Please change the company address printed on my next invoice.",
+    "answer": "billing",
+    "disposition": "ACCEPTED"
+  },
+  {
+    "key": "SUP-06",
+    "text": "Exporting a report produces an empty file even though the report has rows.",
+    "answer": "technical",
+    "disposition": "ACCEPTED"
+  },
+  {
+    "key": "SUP-07",
+    "text": "There is no option to schedule reports. Could you add a weekly email delivery setting?",
+    "answer": "technical",
+    "disposition": "ACCEPTED",
+    "target": "feature"
+  },
+  {
+    "key": "SUP-08",
+    "text": "The amount looks wrong and the page is broken. Can someone help?",
+    "answer": "billing",
+    "disposition": "AMBIGUOUS"
+  },
+  {
+    "key": "SUP-09",
+    "text": "The existing search button stops responding whenever I click it.",
+    "answer": "billing",
+    "disposition": "INVALID"
+  },
+  {
+    "key": "SUP-10",
+    "text": "Could you add French as an interface language?",
+    "answer": "feature",
+    "disposition": null
+  }
+]

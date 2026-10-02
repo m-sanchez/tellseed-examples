@@ -1,0 +1,7 @@
+{"id":"sub_1","text":"I was charged twice for my monthly subscription. Please refund the duplicate charge.","label":0,"label_name":"billing","split":"train","lineage_group_id":"SUP-01"}
+{"id":"sub_2","text":"The dashboard stays blank after I sign in, even after refreshing the page.","label":1,"label_name":"technical","split":"dev","lineage_group_id":"SUP-02"}
+{"id":"sub_3","text":"Could you add a dark mode to the dashboard?","label":2,"label_name":"feature","split":"train","lineage_group_id":"SUP-03"}
+{"id":"sub_4","text":"What time does your support team open on Saturdays?","label":3,"label_name":"other","split":"train","lineage_group_id":"SUP-04"}
+{"id":"sub_5","text":"Please change the company address printed on my next invoice.","label":0,"label_name":"billing","split":"dev","lineage_group_id":"SUP-05"}
+{"id":"sub_6","text":"Exporting a report produces an empty file even though the report has rows.","label":1,"label_name":"technical","split":"train","lineage_group_id":"SUP-06"}
+{"id":"sub_7","text":"There is no option to schedule reports. Could you add a weekly email delivery setting?","label":2,"label_name":"feature","split":"train","lineage_group_id":"SUP-07"}

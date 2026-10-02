@@ -1,0 +1,108 @@
+{
+  "snapshotId": "exp_1",
+  "schemaVersion": 1,
+  "createdAt": "2026-10-02T07:19:20.141Z",
+  "campaignId": "cmp_1",
+  "campaignSlug": "synthetic-support-triage",
+  "campaignName": "Support triage: synthetic pilot",
+  "campaignVersions": [
+    {
+      "version": 1,
+      "contentDigest": "506e6f0f36086c1e79f7e964298948e3a15db14c7e57c75a814a6b5aef3ca326",
+      "publishedAt": "2026-10-02T07:19:20.043Z"
+    }
+  ],
+  "policies": {
+    "collection": {
+      "maxSubmissionsPerContributor": 0,
+      "maxSubmissionsPerScenario": 0,
+      "roundSize": 10,
+      "ordering": "sequential",
+      "allowSkip": true,
+      "askDeclaredAssistance": true,
+      "askContributorName": false,
+      "askContributorEmail": false
+    },
+    "review": {
+      "allowUnreviewedInReviewedExport": false,
+      "requiredReviews": 1
+    },
+    "briefIncludedInExport": true
+  },
+  "counts": {
+    "submissions": 10,
+    "raw": 10,
+    "reviewed": 7,
+    "contributors": 1,
+    "review": {
+      "ACCEPTED": 7,
+      "AMBIGUOUS": 1,
+      "INVALID": 1,
+      "OUT_OF_SCOPE": 0,
+      "NEEDS_SECOND_REVIEW": 0,
+      "unreviewed": 1,
+      "unresolved": 2,
+      "finalized": 7
+    }
+  },
+  "exclusions": [
+    {
+      "reason": "not-accepted",
+      "count": 2,
+      "explanation": "A reviewer marked these ambiguous, invalid or out of scope."
+    },
+    {
+      "reason": "unreviewed",
+      "count": 1,
+      "explanation": "Nobody has reviewed these yet."
+    }
+  ],
+  "splits": {
+    "strategy": "scenario",
+    "ratios": {
+      "train": 0.8,
+      "dev": 0.1,
+      "test": 0.1
+    },
+    "seed": "support-triage-v1",
+    "groups": 10,
+    "counts": {
+      "train": 8,
+      "dev": 2,
+      "test": 0
+    },
+    "leakedGroups": [],
+    "empty": [
+      "test"
+    ]
+  },
+  "lineage": {
+    "groupedBy": "scenario.lineageGroupId, defaulting to scenario.externalKey",
+    "groups": 10
+  },
+  "files": [
+    {
+      "name": "raw.jsonl",
+      "records": 10,
+      "bytes": 11415,
+      "sha256": "65d91b571d3420cb007a90ecb6f39f4a9873efe7180e81b1ffdd2f83006b334b"
+    },
+    {
+      "name": "reviewed.jsonl",
+      "records": 7,
+      "bytes": 7633,
+      "sha256": "8ea4075ab7f735e8b5d278c25c9986631b7c38905befd55ef9839155121a06e7"
+    },
+    {
+      "name": "raw.csv",
+      "records": 10,
+      "bytes": 2624,
+      "sha256": "fc8a5c6176edc52878f36225f4397ce987965b978e8935aabfcc838dfc7ea32a"
+    }
+  ],
+  "generator": {
+    "name": "tellseed",
+    "version": "0.1.0"
+  },
+  "manifestDigest": "19ac54fedc663d134b0a965af62d29e2ef63b67fdc7127f2ac9aed67d14d8b80"
+}

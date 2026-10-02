@@ -1,0 +1,281 @@
+{
+  "slug": "synthetic-support-triage",
+  "name": "Support triage: synthetic pilot",
+  "objective": "Test a support-message labelling workflow using ten fictional messages, scripted answers and scripted review decisions.",
+  "purpose": "Demonstration only. No customer records or real participant judgements are collected in this example.",
+  "language": "en",
+  "instructions": "Choose the topic of the message. These messages are fictional. Skip any item you cannot judge from the available context.",
+  "brief": "Billing: charges, refunds, invoices or subscription payments. Technical problem: an existing feature fails to work. Feature request: a capability that does not exist yet. Other: a request outside those topics. For mixed topics, use the explicit requested action; skip if no primary action can be identified.",
+  "collectionPolicy": {
+    "roundSize": 10,
+    "ordering": "sequential",
+    "allowSkip": true,
+    "maxSubmissionsPerContributor": 0,
+    "maxSubmissionsPerScenario": 0,
+    "askDeclaredAssistance": true,
+    "askContributorName": false,
+    "askContributorEmail": false
+  },
+  "scenarios": [
+    {
+      "externalKey": "SUP-01",
+      "context": "I was charged twice for my monthly subscription. Please refund the duplicate charge.",
+      "responseSpec": {
+        "kind": "single_choice",
+        "options": [
+          {
+            "value": "billing",
+            "label": "Billing"
+          },
+          {
+            "value": "technical",
+            "label": "Technical problem"
+          },
+          {
+            "value": "feature",
+            "label": "Feature request"
+          },
+          {
+            "value": "other",
+            "label": "Other"
+          }
+        ],
+        "allowOther": false
+      }
+    },
+    {
+      "externalKey": "SUP-02",
+      "context": "The dashboard stays blank after I sign in, even after refreshing the page.",
+      "responseSpec": {
+        "kind": "single_choice",
+        "options": [
+          {
+            "value": "billing",
+            "label": "Billing"
+          },
+          {
+            "value": "technical",
+            "label": "Technical problem"
+          },
+          {
+            "value": "feature",
+            "label": "Feature request"
+          },
+          {
+            "value": "other",
+            "label": "Other"
+          }
+        ],
+        "allowOther": false
+      }
+    },
+    {
+      "externalKey": "SUP-03",
+      "context": "Could you add a dark mode to the dashboard?",
+      "responseSpec": {
+        "kind": "single_choice",
+        "options": [
+          {
+            "value": "billing",
+            "label": "Billing"
+          },
+          {
+            "value": "technical",
+            "label": "Technical problem"
+          },
+          {
+            "value": "feature",
+            "label": "Feature request"
+          },
+          {
+            "value": "other",
+            "label": "Other"
+          }
+        ],
+        "allowOther": false
+      }
+    },
+    {
+      "externalKey": "SUP-04",
+      "context": "What time does your support team open on Saturdays?",
+      "responseSpec": {
+        "kind": "single_choice",
+        "options": [
+          {
+            "value": "billing",
+            "label": "Billing"
+          },
+          {
+            "value": "technical",
+            "label": "Technical problem"
+          },
+          {
+            "value": "feature",
+            "label": "Feature request"
+          },
+          {
+            "value": "other",
+            "label": "Other"
+          }
+        ],
+        "allowOther": false
+      }
+    },
+    {
+      "externalKey": "SUP-05",
+      "context": "Please change the company address printed on my next invoice.",
+      "responseSpec": {
+        "kind": "single_choice",
+        "options": [
+          {
+            "value": "billing",
+            "label": "Billing"
+          },
+          {
+            "value": "technical",
+            "label": "Technical problem"
+          },
+          {
+            "value": "feature",
+            "label": "Feature request"
+          },
+          {
+            "value": "other",
+            "label": "Other"
+          }
+        ],
+        "allowOther": false
+      }
+    },
+    {
+      "externalKey": "SUP-06",
+      "context": "Exporting a report produces an empty file even though the report has rows.",
+      "responseSpec": {
+        "kind": "single_choice",
+        "options": [
+          {
+            "value": "billing",
+            "label": "Billing"
+          },
+          {
+            "value": "technical",
+            "label": "Technical problem"
+          },
+          {
+            "value": "feature",
+            "label": "Feature request"
+          },
+          {
+            "value": "other",
+            "label": "Other"
+          }
+        ],
+        "allowOther": false
+      }
+    },
+    {
+      "externalKey": "SUP-07",
+      "context": "There is no option to schedule reports. Could you add a weekly email delivery setting?",
+      "responseSpec": {
+        "kind": "single_choice",
+        "options": [
+          {
+            "value": "billing",
+            "label": "Billing"
+          },
+          {
+            "value": "technical",
+            "label": "Technical problem"
+          },
+          {
+            "value": "feature",
+            "label": "Feature request"
+          },
+          {
+            "value": "other",
+            "label": "Other"
+          }
+        ],
+        "allowOther": false
+      }
+    },
+    {
+      "externalKey": "SUP-08",
+      "context": "The amount looks wrong and the page is broken. Can someone help?",
+      "responseSpec": {
+        "kind": "single_choice",
+        "options": [
+          {
+            "value": "billing",
+            "label": "Billing"
+          },
+          {
+            "value": "technical",
+            "label": "Technical problem"
+          },
+          {
+            "value": "feature",
+            "label": "Feature request"
+          },
+          {
+            "value": "other",
+            "label": "Other"
+          }
+        ],
+        "allowOther": false
+      }
+    },
+    {
+      "externalKey": "SUP-09",
+      "context": "The existing search button stops responding whenever I click it.",
+      "responseSpec": {
+        "kind": "single_choice",
+        "options": [
+          {
+            "value": "billing",
+            "label": "Billing"
+          },
+          {
+            "value": "technical",
+            "label": "Technical problem"
+          },
+          {
+            "value": "feature",
+            "label": "Feature request"
+          },
+          {
+            "value": "other",
+            "label": "Other"
+          }
+        ],
+        "allowOther": false
+      }
+    },
+    {
+      "externalKey": "SUP-10",
+      "context": "Could you add French as an interface language?",
+      "responseSpec": {
+        "kind": "single_choice",
+        "options": [
+          {
+            "value": "billing",
+            "label": "Billing"
+          },
+          {
+            "value": "technical",
+            "label": "Technical problem"
+          },
+          {
+            "value": "feature",
+            "label": "Feature request"
+          },
+          {
+            "value": "other",
+            "label": "Other"
+          }
+        ],
+        "allowOther": false
+      }
+    }
+  ]
+}

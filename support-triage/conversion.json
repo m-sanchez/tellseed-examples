@@ -1,0 +1,20 @@
+{
+  "sourceManifestDigest": "19ac54fedc663d134b0a965af62d29e2ef63b67fdc7127f2ac9aed67d14d8b80",
+  "sourceReviewedSha256": "8ea4075ab7f735e8b5d278c25c9986631b7c38905befd55ef9839155121a06e7",
+  "labelMapping": [
+    "billing",
+    "technical",
+    "feature",
+    "other"
+  ],
+  "reviewedRows": 7,
+  "counts": {
+    "train": 5,
+    "validation": 2,
+    "test": 0
+  },
+  "emptySplits": [
+    "test"
+  ],
+  "note": "Only text and label are model inputs. IDs, split and provenance are audit metadata. Counts describe this fixture, not model quality."
+}

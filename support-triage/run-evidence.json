@@ -1,0 +1,15 @@
+{
+  "synthetic": true,
+  "generatedAt": "2026-10-02T07:19:20.141Z",
+  "execution": "In-process MCP transport and application Request/Response routes with isolated SQLite. No listening socket, production connection, human participant or model training.",
+  "automatedRunMilliseconds": 206,
+  "timingMeaning": "Automated local execution only. Not human completion time, hosting latency or a product performance benchmark.",
+  "shownItems": 10,
+  "submittedAnswers": 10,
+  "reviewedExamples": 7,
+  "correctedExamples": 1,
+  "rejectedOrPendingExamples": 3,
+  "manifestVerified": true,
+  "applicationBaseCommit": "14a356cd6023cf2bc399c355cac00f9f2d8d5470",
+  "applicationChanges": "Adds browser correction controls and readable labels for single-choice review."
+}
