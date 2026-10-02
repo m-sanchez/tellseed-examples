@@ -1,0 +1,114 @@
+{
+  "name": "Tellseed: verify signed webhook events",
+  "active": false,
+  "nodes": [
+    {
+      "id": "webhook",
+      "name": "Tellseed event",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "webhookId": "tellseed-events",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "tellseed-events",
+        "responseMode": "lastNode",
+        "responseData": "firstEntryJson",
+        "options": {
+          "rawBody": true
+        }
+      },
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "prepare",
+      "name": "Read signed bytes",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "parameters": {
+        "jsCode": "const headers = $input.first().json.headers ?? {};\nconst match = /^t=(\\d{10}),v1=([a-f0-9]{64})$/.exec(headers['x-tellseed-signature'] ?? '');\nif (!match || Math.abs(Date.now() / 1000 - Number(match[1])) > 300) throw new Error('Missing or expired Tellseed signature');\nconst bytes = await this.helpers.getBinaryDataBuffer(0, 'data');\nif (bytes.length > 8192) throw new Error('Event is too large');\nreturn [{json: {raw: bytes.toString('utf8'), timestamp: match[1], signature: match[2], eventId: headers['x-tellseed-event-id']}}];"
+      },
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "id": "hmac",
+      "name": "Calculate HMAC",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 2,
+      "parameters": {
+        "action": "hmac",
+        "type": "SHA256",
+        "binaryData": false,
+        "value": "={{ $json.timestamp + \".\" + $json.raw }}",
+        "dataPropertyName": "expectedSignature",
+        "encoding": "hex"
+      },
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "id": "verify",
+      "name": "Verified event",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst expected = String(input.expectedSignature ?? '');\nconst actual = String(input.signature ?? '');\nlet difference = expected.length ^ actual.length;\nfor (let i = 0; i < 64; i++) difference |= (expected.charCodeAt(i) || 0) ^ (actual.charCodeAt(i) || 0);\nif (difference !== 0 || expected.length !== 64) throw new Error('Invalid Tellseed signature');\nconst event = JSON.parse(input.raw);\nif (event.schemaVersion !== 1 || event.id !== input.eventId || !['webhook.test','answer.received','campaign.published','export.ready'].includes(event.type)) throw new Error('Unsupported event');\nreturn [{json: {accepted: true, eventId: event.id, event}}];"
+      },
+      "position": [
+        660,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Tellseed event": {
+      "main": [
+        [
+          {
+            "node": "Read signed bytes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read signed bytes": {
+      "main": [
+        [
+          {
+            "node": "Calculate HMAC",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate HMAC": {
+      "main": [
+        [
+          {
+            "node": "Verified event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "none",
+    "saveManualExecutions": false,
+    "executionTimeout": 180
+  },
+  "pinData": {},
+  "tags": []
+}

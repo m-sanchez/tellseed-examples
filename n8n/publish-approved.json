@@ -1,0 +1,245 @@
+{
+  "name": "Tellseed: publish an approved campaign",
+  "active": false,
+  "nodes": [
+    {
+      "id": "manual",
+      "name": "Run manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "config",
+      "name": "Campaign",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "campaignId",
+              "name": "campaignId",
+              "type": "string",
+              "value": "REPLACE_WITH_YOUR_CAMPAIGN_ID"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "id": "approval",
+      "name": "Check human approval",
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "parameters": {
+        "serverTransport": "httpStreamable",
+        "endpointUrl": "https://app.tellseed.com/mcp",
+        "authentication": "bearerAuth",
+        "tool": {
+          "__rl": true,
+          "mode": "id",
+          "value": "campaign_get_approval_state"
+        },
+        "inputMode": "json",
+        "jsonInput": "={{ { campaignId: $json.campaignId } }}",
+        "options": {
+          "timeout": 60000,
+          "convertToBinary": false
+        }
+      },
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "id": "gate",
+      "name": "Require approval",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "parameters": {
+        "jsCode": "const result = $input.first().json;\nconst text = result.content?.find(item => item.type === 'text')?.text;\nconst value = result.structuredContent ?? (typeof text === 'string' ? JSON.parse(text) : text);\nif (!value || value.error) throw new Error(value?.error || 'Tellseed returned no usable result');\nif (!value.approved) throw new Error('The current draft needs human approval in Tellseed.');\nreturn [{json: {campaignId: value.confirmed.campaignId}}];"
+      },
+      "position": [
+        660,
+        0
+      ]
+    },
+    {
+      "id": "publish",
+      "name": "Publish approved campaign",
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "parameters": {
+        "serverTransport": "httpStreamable",
+        "endpointUrl": "https://app.tellseed.com/mcp",
+        "authentication": "bearerAuth",
+        "tool": {
+          "__rl": true,
+          "mode": "id",
+          "value": "campaign_publish"
+        },
+        "inputMode": "json",
+        "jsonInput": "={{ { campaignId: $json.campaignId } }}",
+        "options": {
+          "timeout": 60000,
+          "convertToBinary": false
+        }
+      },
+      "position": [
+        880,
+        0
+      ]
+    },
+    {
+      "id": "published",
+      "name": "Require published state",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "parameters": {
+        "jsCode": "const result = $input.first().json;\nconst text = result.content?.find(item => item.type === 'text')?.text;\nconst value = result.structuredContent ?? (typeof text === 'string' ? JSON.parse(text) : text);\nif (!value || value.error) throw new Error(value?.error || 'Tellseed returned no usable result');\nif (value.confirmed.status !== 'PUBLISHED') throw new Error('Campaign was not published');\nreturn [{json: {campaignId: value.confirmed.campaignId}}];"
+      },
+      "position": [
+        1100,
+        0
+      ]
+    },
+    {
+      "id": "share",
+      "name": "Get participant link",
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "parameters": {
+        "serverTransport": "httpStreamable",
+        "endpointUrl": "https://app.tellseed.com/mcp",
+        "authentication": "bearerAuth",
+        "tool": {
+          "__rl": true,
+          "mode": "id",
+          "value": "campaign_share_link"
+        },
+        "inputMode": "json",
+        "jsonInput": "={{ { campaignId: $json.campaignId, audience: \"contributor\", label: \"n8n workflow\", expiresInDays: 30 } }}",
+        "options": {
+          "timeout": 60000,
+          "convertToBinary": false
+        }
+      },
+      "position": [
+        1320,
+        0
+      ]
+    },
+    {
+      "id": "result",
+      "name": "Published result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "parameters": {
+        "jsCode": "const result = $input.first().json;\nconst text = result.content?.find(item => item.type === 'text')?.text;\nconst value = result.structuredContent ?? (typeof text === 'string' ? JSON.parse(text) : text);\nif (!value || value.error) throw new Error(value?.error || 'Tellseed returned no usable result');\nreturn [{json: {campaignId: $('Require published state').first().json.campaignId, participantUrl: value.url, expiresAt: value.expiresAt}}];"
+      },
+      "position": [
+        1540,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Run manually": {
+      "main": [
+        [
+          {
+            "node": "Campaign",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Campaign": {
+      "main": [
+        [
+          {
+            "node": "Check human approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check human approval": {
+      "main": [
+        [
+          {
+            "node": "Require approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Require approval": {
+      "main": [
+        [
+          {
+            "node": "Publish approved campaign",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Publish approved campaign": {
+      "main": [
+        [
+          {
+            "node": "Require published state",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Require published state": {
+      "main": [
+        [
+          {
+            "node": "Get participant link",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get participant link": {
+      "main": [
+        [
+          {
+            "node": "Published result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "none",
+    "saveManualExecutions": false,
+    "executionTimeout": 180
+  },
+  "pinData": {},
+  "tags": []
+}

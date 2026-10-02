@@ -12,7 +12,7 @@ This repository contains public, reproducible examples for [Tellseed](https://te
 | --- | --- | --- |
 | [Support routing v2](support-routing/README.md) | 160 original fictional requests, four balanced labels, 96/32/32 splits and 12 clarification cases | A classification starter experiment and import checks |
 | [Collection and review](support-triage/README.md) | Ten scripted answers become seven accepted rows through an isolated Tellseed instance | Reproducing the actual collection, correction and export process |
-| [n8n export workflow](n8n/README.md) | Native MCP Client, Bearer credential, frozen export and counts | Automating a reviewed export without an AI model |
+| [n8n automation workflows](n8n/README.md) | Restricted keys, drafts, approved publication, signed events and reviewed exports | Connecting data collection to your existing tools without an AI model call |
 
 The larger dataset uses disjoint intent families across splits and includes a documented rubric, source text, deterministic builder, duplicate checks and file hashes. All labels are authored with AI assistance. There are no independently collected human judgements or model-performance claims.
 

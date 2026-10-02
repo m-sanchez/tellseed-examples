@@ -1,0 +1,184 @@
+{
+  "name": "Tellseed: create a draft for human approval",
+  "active": false,
+  "nodes": [
+    {
+      "id": "manual",
+      "name": "Run manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "config",
+      "name": "Campaign input",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "campaignJson",
+              "name": "campaignJson",
+              "type": "string",
+              "value": "{\"slug\":\"feedback-pilot\",\"name\":\"Your feedback\",\"objective\":\"Understand participant experience and choose useful improvements.\",\"instructions\":\"Answer from your own experience. You may skip any question.\",\"brief\":\"This short questionnaire helps us decide what to improve.\",\"collectionPolicy\":{\"roundSize\":10,\"ordering\":\"sequential\",\"allowSkip\":true},\"scenarios\":[{\"externalKey\":\"q1\",\"context\":\"What brought you here?\",\"responseSpec\":{\"kind\":\"free_text\",\"minLength\":1,\"maxLength\":2000,\"verbatim\":true}},{\"externalKey\":\"q2\",\"context\":\"What were you hoping to achieve?\",\"responseSpec\":{\"kind\":\"free_text\",\"minLength\":1,\"maxLength\":2000,\"verbatim\":true}},{\"externalKey\":\"q3\",\"context\":\"What worked well for you?\",\"responseSpec\":{\"kind\":\"free_text\",\"minLength\":1,\"maxLength\":2000,\"verbatim\":true}},{\"externalKey\":\"q4\",\"context\":\"What was difficult or confusing?\",\"responseSpec\":{\"kind\":\"free_text\",\"minLength\":1,\"maxLength\":2000,\"verbatim\":true}},{\"externalKey\":\"q5\",\"context\":\"What would you change first?\",\"responseSpec\":{\"kind\":\"free_text\",\"minLength\":1,\"maxLength\":2000,\"verbatim\":true}},{\"externalKey\":\"q6\",\"context\":\"Was any information missing?\",\"responseSpec\":{\"kind\":\"free_text\",\"minLength\":1,\"maxLength\":2000,\"verbatim\":true}},{\"externalKey\":\"q7\",\"context\":\"How did this compare with your expectations?\",\"responseSpec\":{\"kind\":\"free_text\",\"minLength\":1,\"maxLength\":2000,\"verbatim\":true}},{\"externalKey\":\"q8\",\"context\":\"What would make you use this again?\",\"responseSpec\":{\"kind\":\"free_text\",\"minLength\":1,\"maxLength\":2000,\"verbatim\":true}},{\"externalKey\":\"q9\",\"context\":\"Who else could benefit from this?\",\"responseSpec\":{\"kind\":\"free_text\",\"minLength\":1,\"maxLength\":2000,\"verbatim\":true}},{\"externalKey\":\"q10\",\"context\":\"Is there anything else you want us to know?\",\"responseSpec\":{\"kind\":\"free_text\",\"minLength\":1,\"maxLength\":2000,\"verbatim\":true}}]}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "id": "create",
+      "name": "Create draft",
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "parameters": {
+        "serverTransport": "httpStreamable",
+        "endpointUrl": "https://app.tellseed.com/mcp",
+        "authentication": "bearerAuth",
+        "tool": {
+          "__rl": true,
+          "mode": "id",
+          "value": "campaign_create_draft"
+        },
+        "inputMode": "json",
+        "jsonInput": "={{ JSON.parse($json.campaignJson) }}",
+        "options": {
+          "timeout": 60000,
+          "convertToBinary": false
+        }
+      },
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "id": "check",
+      "name": "Read draft ID",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "parameters": {
+        "jsCode": "const result = $input.first().json;\nconst text = result.content?.find(item => item.type === 'text')?.text;\nconst value = result.structuredContent ?? (typeof text === 'string' ? JSON.parse(text) : text);\nif (!value || value.error) throw new Error(value?.error || 'Tellseed returned no usable result');\nreturn [{json: {campaignId: value.confirmed.campaignId}}];"
+      },
+      "position": [
+        660,
+        0
+      ]
+    },
+    {
+      "id": "preview",
+      "name": "Get owner approval URL",
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "parameters": {
+        "serverTransport": "httpStreamable",
+        "endpointUrl": "https://app.tellseed.com/mcp",
+        "authentication": "bearerAuth",
+        "tool": {
+          "__rl": true,
+          "mode": "id",
+          "value": "campaign_preview"
+        },
+        "inputMode": "json",
+        "jsonInput": "={{ { campaignId: $json.campaignId } }}",
+        "options": {
+          "timeout": 60000,
+          "convertToBinary": false
+        }
+      },
+      "position": [
+        880,
+        0
+      ]
+    },
+    {
+      "id": "handoff",
+      "name": "Human approval handoff",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "parameters": {
+        "jsCode": "const result = $input.first().json;\nconst text = result.content?.find(item => item.type === 'text')?.text;\nconst value = result.structuredContent ?? (typeof text === 'string' ? JSON.parse(text) : text);\nif (!value || value.error) throw new Error(value?.error || 'Tellseed returned no usable result');\nreturn [{json: {campaignId: value.confirmed.campaignId, approvalUrl: value.approvalUrl, version: value.previewVersion, digest: value.previewDigest, next: 'The workspace owner must open this URL, sign in and approve. Then run the separate Publish approved campaign workflow.'}}];"
+      },
+      "position": [
+        1100,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Run manually": {
+      "main": [
+        [
+          {
+            "node": "Campaign input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Campaign input": {
+      "main": [
+        [
+          {
+            "node": "Create draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create draft": {
+      "main": [
+        [
+          {
+            "node": "Read draft ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read draft ID": {
+      "main": [
+        [
+          {
+            "node": "Get owner approval URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get owner approval URL": {
+      "main": [
+        [
+          {
+            "node": "Human approval handoff",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "none",
+    "saveManualExecutions": false,
+    "executionTimeout": 180
+  },
+  "pinData": {},
+  "tags": []
+}

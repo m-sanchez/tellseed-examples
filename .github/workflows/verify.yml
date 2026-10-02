@@ -16,7 +16,7 @@ jobs:
       - run: node scripts/verify.mjs
       - run: node support-routing/build.mjs --check
       - run: node support-routing/verify.mjs support-routing
-      - run: node n8n/build.mjs && git diff --exit-code -- n8n/reviewed-export.json
+      - run: node n8n/build.mjs && git diff --exit-code -- n8n
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'

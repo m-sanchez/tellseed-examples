@@ -38,3 +38,4 @@ const output = resolve(import.meta.dirname, 'reviewed-export.json');
 await mkdir(import.meta.dirname, { recursive: true });
 await writeFile(output, JSON.stringify(workflow, null, 2) + '\n');
 console.log(output);
+await import('./build-automation.mjs');
