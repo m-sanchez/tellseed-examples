@@ -43,11 +43,15 @@ The template reads the original body bytes, computes HMAC-SHA256, compares signa
 | `answer.received` | `submissionId`, `campaignVersion` |
 | `campaign.published` | `campaignVersion` |
 | `export.ready` | `snapshotId` |
+| `round.completed` | `roundId`, `campaignVersion`, `answered`, `skippedInVisit`, `reason` |
+| `review.finalized` | `submissionId`, `reviewId` |
 | `webhook.test` | Empty data object |
 
 The envelope has `id`, `schemaVersion: 1`, `type`, `workspaceId`, `campaignId`, `occurredAt` and `data`. It excludes answer text and contact details. An answer event is one item answer, including an imported answer, not a completed questionnaire.
 
-If needed, fetch a stored answer with `GET /api/automation/answers/{submissionId}` and a scoped `results:read` Bearer key. That authenticated result can include optional contact fields. Trial results restrictions remain enforced. Only retrieve data needed by your destination.
+If needed, fetch a stored answer with `GET /api/automation/answers/{submissionId}` and a scoped `results:read` Bearer key. That authenticated result can include optional contact fields. Trial results restrictions remain enforced. The response also includes current `review.finalized`, `review.unresolved`, `review.target` and effective decision IDs. Before acting on `review.finalized`, read that current state: a later dissent can withdraw finalization. Only retrieve data needed by your destination.
+
+A round event requires at least one distinct answer and an actual configured stop. Check its answer count and reason, rather than assuming all questions were answered. Skips are counted for the whole visit. Retries and repeated wording cannot increment the round again. Accepted review revisions emit only when enough effective acceptance exists without dissent; revisions can generate later events.
 
 ## Retries, exports and privacy
 
@@ -59,10 +63,10 @@ Execution-history saving is disabled for successes, failures and manual runs. n8
 
 ## Verification and limits
 
-Real n8n execution verified draft retries, approval refusal and publication after scripted approval. The export fixture produced seven reviewed rows from ten answers, preserving an empty-test-split warning and frozen file hashes. A real Webhook/Crypto receiver verified three event types and rejected invalid and expired signatures. Receiver and file-backed queue restarts, receiver/downstream outages and replay recovered. A synthetic SQLite destination with a unique event ID kept three effects despite duplicate delivery. Revoked downloads failed and original answers remained unchanged. Customers must configure their own idempotent destination.
+Real n8n execution verified draft retries, approval refusal and publication after scripted approval. The export fixture produced seven reviewed rows from ten answers, preserving an empty-test-split warning and frozen file hashes. The Webhook/Crypto receiver harness exercises five event types and rejected invalid and expired signatures. Receiver and file-backed queue restarts, receiver/downstream outages and replay recovered. A synthetic SQLite destination with a unique event ID checks one effect per event despite duplicate delivery. Revoked downloads failed and original answers remained unchanged. Customers must configure their own idempotent destination.
 
 The private product repository holds the integration harness. Public [build.mjs](build.mjs) and [build-automation.mjs](build-automation.mjs) regenerate the four credential-free templates with Node 22.18+. `node build.mjs` starts no service.
 
-Round-completion and review-finalized events, turnkey spreadsheet destinations, Make/Zapier listings and hosted OAuth remain planned. Webhooks require public HTTPS on port 443 with IPv4 DNS; redirects and private networks are refused.
+Turnkey spreadsheet destinations, Make/Zapier listings and hosted OAuth remain planned. Webhooks require public HTTPS on port 443 with IPv4 DNS; redirects and private networks are refused.
 
 [Setup guide](https://tellseed.com/guides/automation) · [Collection walkthrough](https://tellseed.com/guides/support-triage-dataset) · [MCP](https://tellseed.com/mcp) · [n8n Crypto](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.crypto/)

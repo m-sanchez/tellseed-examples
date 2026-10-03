@@ -59,7 +59,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "parameters": {
-        "jsCode": "const input = $input.first().json;\nconst expected = String(input.expectedSignature ?? '');\nconst actual = String(input.signature ?? '');\nlet difference = expected.length ^ actual.length;\nfor (let i = 0; i < 64; i++) difference |= (expected.charCodeAt(i) || 0) ^ (actual.charCodeAt(i) || 0);\nif (difference !== 0 || expected.length !== 64) throw new Error('Invalid Tellseed signature');\nconst event = JSON.parse(input.raw);\nif (event.schemaVersion !== 1 || event.id !== input.eventId || !['webhook.test','answer.received','campaign.published','export.ready'].includes(event.type)) throw new Error('Unsupported event');\nreturn [{json: {accepted: true, eventId: event.id, event}}];"
+        "jsCode": "const input = $input.first().json;\nconst expected = String(input.expectedSignature ?? '');\nconst actual = String(input.signature ?? '');\nlet difference = expected.length ^ actual.length;\nfor (let i = 0; i < 64; i++) difference |= (expected.charCodeAt(i) || 0) ^ (actual.charCodeAt(i) || 0);\nif (difference !== 0 || expected.length !== 64) throw new Error('Invalid Tellseed signature');\nconst event = JSON.parse(input.raw);\nif (event.schemaVersion !== 1 || event.id !== input.eventId || !['webhook.test','answer.received','campaign.published','export.ready','round.completed','review.finalized'].includes(event.type)) throw new Error('Unsupported event');\nreturn [{json: {accepted: true, eventId: event.id, event}}];"
       },
       "position": [
         660,

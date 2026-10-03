@@ -62,7 +62,7 @@ let difference = expected.length ^ actual.length;
 for (let i = 0; i < 64; i++) difference |= (expected.charCodeAt(i) || 0) ^ (actual.charCodeAt(i) || 0);
 if (difference !== 0 || expected.length !== 64) throw new Error('Invalid Tellseed signature');
 const event = JSON.parse(input.raw);
-if (event.schemaVersion !== 1 || event.id !== input.eventId || !['webhook.test','answer.received','campaign.published','export.ready'].includes(event.type)) throw new Error('Unsupported event');
+if (event.schemaVersion !== 1 || event.id !== input.eventId || !['webhook.test','answer.received','campaign.published','export.ready','round.completed','review.finalized'].includes(event.type)) throw new Error('Unsupported event');
 return [{json: {accepted: true, eventId: event.id, event}}];`),
 ]);
 for (const [name, value] of [['create-draft', drafts], ['publish-approved', publish], ['webhook-events', events]]) {
