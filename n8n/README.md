@@ -2,7 +2,7 @@
 
 Connect surveys, feedback, research and training-data collection to n8n. These templates use deterministic MCP calls and signed events without an AI model call. Import them into an existing n8n instance. They contain no credentials or saved executions and start inactive.
 
-**Verified with n8n 2.41.6 on 2 October 2026**, using native MCP Client, HTTP Bearer Auth and Crypto v2 nodes on a disposable runner with synthetic data. Other versions and n8n Cloud are unverified.
+**Verified with n8n 2.41.6 on 3 October 2026**, using native MCP Client, HTTP Bearer Auth and Crypto v2 nodes with synthetic data. Controlled integration tests and a live Hosted Free internal pilot passed. Other versions and n8n Cloud are unverified.
 
 | Template | Result | Restricted key permissions |
 | --- | --- | --- |
@@ -62,6 +62,8 @@ Export results include snapshot ID, counts, exclusions, splits, warnings and aut
 Execution-history saving is disabled for successes, failures and manual runs. n8n still processes intermediate data in memory and displays it during manual runs. Check your instance logs, backups and administrator policies.
 
 ## Verification and limits
+
+The [live internal pilot](https://tellseed.com/guides/automation#pilot) used public Tellseed HTTPS, ten answers, ten scripted reviews, three hash-verified export files and production webhook delivery to a temporary n8n receiver. A destination outage recovered without duplicate records; revoked access blocked downloads. The workspace/session were operator-provisioned and the destination was a disposable SQLite database. This was not a customer study, signup test or n8n Cloud validation. [Checks and counts](https://tellseed.com/resources/automation-pilot.json).
 
 Real n8n execution verified draft retries, approval refusal and publication after scripted approval. The export fixture produced seven reviewed rows from ten answers, preserving an empty-test-split warning and frozen file hashes. The Webhook/Crypto receiver harness exercises five event types and rejected invalid and expired signatures. Receiver and file-backed queue restarts, receiver/downstream outages and replay recovered. A synthetic SQLite destination with a unique event ID checks one effect per event despite duplicate delivery. Revoked downloads failed and original answers remained unchanged. Customers must configure their own idempotent destination.
 
